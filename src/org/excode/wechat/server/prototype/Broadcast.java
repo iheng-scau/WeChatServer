@@ -27,9 +27,9 @@ public class Broadcast extends Thread {
 			}
 			
 			synchronized(serverThread.clients){
-				for(Thread clientThread:serverThread.clients){
+				for(ClientThread thread:serverThread.clients){
 					try{
-						clientThread.out.writeUTF(str);
+						thread.out.writeUTF(str);
 					}catch(Exception e){
 						e.printStackTrace();
 					}

@@ -15,7 +15,7 @@ public class ServerMainThread extends Thread{
 	Vector<ClientThread> clients;
 	Vector<Object> messages;
 	
-	BroadCast broadcast;
+	Broadcast broadcast;
 	
 	String ip;
 	InetAddress ip_address=null;
@@ -31,7 +31,7 @@ public class ServerMainThread extends Thread{
 			ip=ip_address.getHostAddress();
 			log.info("server address:"+ip+",port:"+String.valueOf(serverSocket.getLocalPort()));
 			
-			broadcast=new BroadCast(this);
+			broadcast=new Broadcast(this);
 			broadcast.start();
 			
 		}catch(Exception e){
@@ -42,15 +42,16 @@ public class ServerMainThread extends Thread{
 	public void run(){
 		while(true){
 			try{
+				log.info("server main thread running");
 				Socket socket=serverSocket.accept();
 				log.info(socket.getInetAddress().getHostAddress());
 				ClientThread clientThread=new ClientThread(socket,this);
-				clietThread.start();
+				clientThread.start();
 				if(socket!=null){
 					clients.addElement(clientThread);
 				}
 			}catch(Exception e){
-				log.info("exception caught"+e.printStackTrace());
+				log.info("exception caught"+e);
 				log.info("establish connection failed");
 				System.exit(0);
 			}
@@ -61,7 +62,7 @@ public class ServerMainThread extends Thread{
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
 		super.finalize();
-		severSocket.close();
+		serverSocket.close();
 	}
 	
 }

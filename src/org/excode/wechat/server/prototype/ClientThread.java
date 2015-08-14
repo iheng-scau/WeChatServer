@@ -35,6 +35,7 @@ public class ClientThread extends Thread {
 		while(true){
 			try{
 				String msg=in.readUTF();
+				log.info("server recieve:"+msg);
 				synchronized(serverThread.messages){
 					if(msg!=null){
 						serverThread.messages.addElement(msg);
