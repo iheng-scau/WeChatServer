@@ -2,14 +2,15 @@ package org.excode.wechat.server.prototype;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-public class ServerMainTread extends Thread{
+public class ServerMainThread extends Thread{
 	ServerSocket serverSocket;
 	public static final int PORT=80;
-	public static Logger log=Logger.getLogger(ServerMainTread.class);
+	public static Logger log=Logger.getLogger(ServerMainThread.class);
 	
 	Vector<ClientThread> clients;
 	Vector<Object> messages;
@@ -41,8 +42,27 @@ public class ServerMainTread extends Thread{
 	public void run(){
 		while(true){
 			try{
-				serverSocket.accept();
+				Socket socket=serverSocket.accept();
+				log.info(socket.getInetAddress().getHostAddress());
+				ClientThread clientThread=new ClientThread(socket,this);
+				clietThread.start();
+				if(socket!=null){
+					clients.addElement(clientThread);
+				}
+			}catch(Exception e){
+				log.info("exception caught"+e.printStackTrace());
+				log.info("establish connection failed");
+				System.exit(0);
 			}
 		}
 	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		super.finalize();
+		severSocket.close();
+	}
+	
 }
+
