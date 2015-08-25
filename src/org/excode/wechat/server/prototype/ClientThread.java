@@ -32,6 +32,7 @@ public class ClientThread extends Thread {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		log.info("Handle Thread is running.for-"+clientSocket.getInetAddress().getHostAddress());
 		while(true){
 			try{
 				String msg=in.readUTF();
@@ -45,7 +46,5 @@ public class ClientThread extends Thread {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	
+	}	
 }

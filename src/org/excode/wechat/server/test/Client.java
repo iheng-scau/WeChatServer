@@ -5,13 +5,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
 public class Client extends Thread{
 	public static final Logger log=Logger.getLogger(Client.class);
 	public static final String HOST_IP="192.168.56.1";
-	public static final int PORT=80;
+	public static final int PORT=8888;
 	
 	public void run(){
 		log.info("client lauched");
@@ -20,7 +21,13 @@ public class Client extends Thread{
 			DataInputStream in=new DataInputStream(socket.getInputStream());
 			DataOutputStream out=new DataOutputStream(socket.getOutputStream());
 			
-			out.writeUTF("text msg");
+			Scanner scanner=new Scanner(System.in);
+			String msg="";
+			
+			while(true){
+				msg=scanner.nextLine();
+				out.writeUTF(msg);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

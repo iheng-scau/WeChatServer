@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 public class ServerMainThread extends Thread{
 	ServerSocket serverSocket;
-	public static final int PORT=80;
+	public static final int PORT=8888;
 	public static Logger log=Logger.getLogger(ServerMainThread.class);
 	
 	Vector<ClientThread> clients;
@@ -40,11 +40,13 @@ public class ServerMainThread extends Thread{
 	}
 	
 	public void run(){
+		log.info("server main thread running-"+Thread.currentThread().getName());
 		while(true){
 			try{
-				log.info("server main thread running");
 				Socket socket=serverSocket.accept();
 				log.info(socket.getInetAddress().getHostAddress());
+				log.info(socket.getInetAddress().getHostName());
+				
 				ClientThread clientThread=new ClientThread(socket,this);
 				clientThread.start();
 				if(socket!=null){
