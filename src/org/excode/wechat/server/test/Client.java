@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 public class Client extends Thread{
 	public static final Logger log=Logger.getLogger(Client.class);
-	public static final String HOST_IP="192.168.56.1";
+	public static final String HOST_IP="169.254.24.42";
 	public static final int PORT=8888;
 	
 	public void run(){
