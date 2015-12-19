@@ -6,6 +6,8 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
+
+
 public class ClientThread extends Thread {
 	public static final Logger log=Logger.getLogger(ClientThread.class);
 	
