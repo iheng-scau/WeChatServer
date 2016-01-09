@@ -13,8 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.excode.wechat.server.utils.Serializer;
+import org.iheng.wechat.entities.WeChatMessage;
+
 public class NIOServer {
-	private static int port=8001;
+	private int port=8001;
 	private Charset cs=Charset.forName("gb2312");
 	
 	private static ByteBuffer sBuffer=ByteBuffer.allocate(1024);
@@ -38,7 +41,7 @@ public class NIOServer {
 	}
 	
 	private void init() throws IOException{
-		ServerSocketChannel serverSocketChannel=ServerSocketChannel.open();
+   		ServerSocketChannel serverSocketChannel=ServerSocketChannel.open();
 		serverSocketChannel.configureBlocking(false);
 		serverSocketChannel.bind(new InetSocketAddress(port));
 		selector=Selector.open();
@@ -62,7 +65,7 @@ public class NIOServer {
 		}
 	}
 	
-	private void handleKey(SelectionKey key) throws IOException{
+	private void handleKey(SelectionKey key) throws Exception{
 		ServerSocketChannel serverChannel=null;
 		SocketChannel clientChannel=null;
 		String rContent=null;
@@ -78,7 +81,9 @@ public class NIOServer {
 			count=clientChannel.read(rBuffer);
 			if(count>0){
 				rBuffer.flip();
-				rContent=String.valueOf(cs.decode(rBuffer));
+				byte[] bytes=rBuffer.array();
+				WeChatMessage msg=(WeChatMessage)Serializer.deserialize(bytes);
+				rContent=msg.getMsgContent();
 				System.out.println(clientChannel.toString()+":"+rContent);
 				dispatch(clientChannel,rContent);
 				clientChannel=(SocketChannel)key.channel();
