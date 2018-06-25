@@ -17,6 +17,7 @@ import java.util.Date;
 @Log4j2
 public class ServerHandler extends SimpleChannelInboundHandler<String>{
     private final static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         ctx.writeAndFlush("Welcome to " + InetAddress.getLocalHost().getHostName() + "!\r\n");

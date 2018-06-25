@@ -1,4 +1,4 @@
-package org.excode.wechat.core;
+package org.excode.wechat.core.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -15,28 +15,27 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 import lombok.extern.log4j.Log4j2;
+import org.excode.wechat.core.conf.WechatServerConfiguration;
 import org.excode.wechat.core.handler.ServerHandler;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zhangdh@jpush.cn
- * @date 6/25/18
+ * @date 6/25/2018
  */
 @Log4j2
-@SpringBootApplication
-@EnableConfigurationProperties(WechatServerConfiguration.class)
-public class WechatServerBootstrap implements ApplicationContextAware{
-    private static ApplicationContext context;
+@Component
+public class WechatServerBootstrap implements ApplicationRunner {
+    @Autowired
+    private WechatServerConfiguration configuration;
 
-    public static void main(String[] args) throws Exception {
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
         SslContext sslContext;
-        if (ssl) {
+        if (configuration.isSsl()) {
             SelfSignedCertificate certificate = new SelfSignedCertificate();
             sslContext = SslContextBuilder.forServer(certificate.certificate(), certificate.privateKey()).build();
         } else {
@@ -68,17 +67,12 @@ public class WechatServerBootstrap implements ApplicationContextAware{
                         }
                     });
 
-            ChannelFuture future=bootstrap.bind(port).sync();
-            log.info("server started,port:{}", port);
+            ChannelFuture future=bootstrap.bind(configuration.getPort()).sync();
+            log.info("server started at port:{}", configuration.getPort());
             future.channel().closeFuture().sync();
         }finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
-        this.context=context;
     }
 }
