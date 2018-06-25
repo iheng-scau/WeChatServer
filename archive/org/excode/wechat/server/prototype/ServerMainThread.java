@@ -1,11 +1,11 @@
 package org.excode.wechat.server.prototype;
 
+import org.apache.log4j.Logger;
+
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
 
 public class ServerMainThread extends Thread{
 	ServerSocket serverSocket;

@@ -1,10 +1,10 @@
 package org.excode.wechat.server.prototype;
 
+import org.apache.log4j.Logger;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
-
-import org.apache.log4j.Logger;
 
 
 
